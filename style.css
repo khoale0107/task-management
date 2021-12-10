@@ -1,0 +1,81 @@
+
+#login-page,
+#reset-password-page {
+    background: linear-gradient(to bottom right, var(--secondary) 10%,var(--light) 100%);
+}
+
+
+#login-form .input-group span {
+    width: 42px;
+}
+
+#wrapper {
+    background-color: #f8f9fa;
+}
+
+#wrapper > .container {
+    min-height: calc(100vh - 3.5rem);
+    padding-top: 1rem;
+    padding-bottom: 1.5rem;
+    margin-top: 56px;
+}
+
+#wrapper .square {
+    min-height: 100%;
+    transition: all .3s ease;
+}
+
+#wrapper .square i {
+    font-size: 80px;
+}
+
+#wrapper .square:hover {
+    filter: brightness(98%);
+}
+
+thead th {
+    border-top: none !important;
+}
+
+td span:hover {
+    opacity: 0.7;
+}
+
+.toast-container {
+    width: calc(100% - 2rem);
+    max-width: 21rem;
+    top: 4.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+}
+
+img {
+    object-fit: cover;
+}
+
+.avatar-overlay {
+    cursor: pointer;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    opacity: 0;
+    background: rgba(0, 0, 0, 0.5);
+    transition: .2s ease;
+}
+
+.avatar-overlay:hover {
+    opacity: 1;
+}
+
+.avatar-overlay span {
+    color: white;
+    font-size: 40px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+}
