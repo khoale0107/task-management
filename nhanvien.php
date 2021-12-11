@@ -56,7 +56,7 @@
                     </div>
 
                     <!-- table================================================================ -->
-                    <div class="border  overflow-auto" style="max-height:420px">
+                    <div class="border  overflow-auto" style="max-height:480px">
                         <table class="table mb-0  table-hover ">
                             <thead class="sticky-top bg-light" style="z-index: 1;">
                                 <tr class="">
