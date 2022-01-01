@@ -49,14 +49,69 @@
 
         <!-- Tab panes -->
         <div class="tab-content">
-            <br>
 
+            <!-- Create request -->
             <?php if ($_SESSION['permission'] !== 'Admin') { ?>
-                <div class="tab-pane container active" id="create-application">
-                    Tạo đơn
+                <div class="tab-pane container active pt-3" id="create-application">
+                    <div class="row">
+                        <div class="col-lg-3 mb-3 mb-lg-0 p-0" >
+                            <div class="p-3  bg-white border rounded">
+                                <h5>Nộp đơn</h5>
+                                <div class="dropdown-divider"></div>
+                                <div class="form-group">
+                                    <label for="">Số ngày nghỉ:</label>
+                                    <input type="number" class="form-control" id="" name="" placeholder="1" min="1">
+                                </div>
+                                <div class="form-group">
+                                    <label for="">Lý do:</label>
+                                    <textarea class="form-control" id="" name="" placeholder=""></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="">File đính kèm:</label>
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input" id="customFile">
+                                        <label class="custom-file-label" for="customFile">Choose file</label>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex flex-end mt-4">
+                                    <button class="btn btn-success ml-auto">Gửi / Submit</button>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class=" col-lg-9 p-0 pl-lg-3 mb-4 mb-lg-0">
+                            <div class="border p-3 rounded bg-white">
+                                <h5>Lịch sử nộp đơn</h5>
+                                <div class="dropdown-divider"></div>
+
+                                <div class="d-flex text-muted justify-content-end">
+                                    <div >Số ngày đã nghỉ: 0</div>
+                                    <div class="ml-5">Số ngày còn lại: 15</div>
+                                </div>
+
+                                <table class="table mb-0  table-hover ">
+                                    <thead class="sticky-top bg-light" style="z-index: 1;">
+                                        <tr class="">
+                                            <th>STT</th>
+                                            <th>Số ngày nghỉ</th>
+                                            <th>Lý do</th>
+                                            <th>File đính kèm</th>
+                                            <th>Trạng thái</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             <?php } ?>
 
+            <!-- Approve request -->
             <?php if ($_SESSION['permission'] !== 'Nhân viên') { ?>
                 <div class="tab-pane container <?= $_SESSION['permission'] === 'Admin' ? "active" : ''?>" id="check-application">
                     Duyệt đơn

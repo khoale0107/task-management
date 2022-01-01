@@ -18,7 +18,7 @@
     $input_password = $_POST['password'];
 
     //prepare sql
-    $stmt = $conn->prepare('SELECT * FROM account WHERE username = ?');
+    $stmt = $conn->prepare('SELECT account.*, phongban.id as idphongban, phongban.tenphongban FROM account LEFT JOIN phongban ON account.maphongban = phongban.ID WHERE username = ?;');
     $stmt->bind_param("s", $input_username);
     
     if (!$stmt->execute()) {
@@ -40,6 +40,8 @@
         $_SESSION['full-name'] = $row['hoten'];
         $_SESSION['permission'] = $row['chucvu'];
         $_SESSION['avatar'] = $row['avatar'];
+        $_SESSION['department-id'] = $row['idphongban'];
+        $_SESSION['department-name'] = $row['tenphongban'];
 
         //set cookie
         if (isset($_POST['rememberCheck'])) {

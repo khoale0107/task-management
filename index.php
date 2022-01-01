@@ -53,7 +53,7 @@
                     </div>
 
                     <div class="col-sm-6 col-lg-3   mb-3">
-                        <a href="donxinnghiphep.php" class="square d-flex flex-column bg-white shadow text-decoration-none text-info border">
+                        <a href="duyetdon.php" class="square d-flex flex-column bg-white shadow text-decoration-none text-info border">
                             <div class="pt-3 px-3 "><b>Duyệt đơn</b></div>
                             <div class="p-3 flex-grow-1"><i class="fas fa-clipboard-check"></i></div>
                         </a>

@@ -22,7 +22,9 @@
 
                     <div class="d-flex flex-column flex-grow-1">
                         <span class=""><b><?= $_SESSION['full-name']?></b></span>
-                        <span class="">@<?= $_SESSION['user']?></span>
+                        <span>
+                            @<span id="username"><?= $_SESSION['user']?></span> 
+                        </span>
                     </div>
                 </a>
 
@@ -72,28 +74,38 @@
                             </li>                            
                         <?php
                     }
+                    else {
+                        ?>
+                            <li class="nav-item">
+                                <a class="nav-link " href="congviec.php">Công việc</a>
+                            </li>
+
+                        <?php
+                    }
                 ?>
 
                 <?php
                     if ($_SESSION['permission'] !== 'Admin') {
                         ?>
                             <li class="nav-item">
-                                <a class="nav-link " href="congviec.php">Công việc</a>
-                            </li>
+                                <a class="nav-link " href="nopdon.php">Nộp đơn</a>
+                            </li>                        
                         <?php
                     }
+
+                    if ($_SESSION['permission'] !== 'Nhân viên') {
+                        ?>
+                            <li class="nav-item">
+                                <a class="nav-link " href="duyetdon.php">Duyệt đơn</a>
+                            </li>                        
+                        <?php
+                    }
+
                 ?>
 
-                <li class="nav-item">
-                    <a class="nav-link" href="donxinnghiphep.php">
-                        <?php
-                            if ($_SESSION['permission'] === 'Admin') {
-                                echo 'Duyệt đơn';
-                            }
-                            else echo 'Đơn xin nghỉ phép';
-                        ?>
-                    </a>
-                </li>    
+
+
+   
 
 
             </ul>

@@ -68,123 +68,109 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div id="wrapper">
-    <?php           
-        include 'navbar.php';
-    ?>
+    <div id="wrapper">
+        <?php           
+            include 'navbar.php';
+        ?>
 
-    <div class="container ">
-        <div class="row ">
-            <!--avatar column ========================================================== -->
-            <div class="col-lg-4 mb-3 mb-lg-0 p-0" >
-                <div class="p-3 pt-4 bg-white border rounded">
-                    <div class="mb-3 mx-auto rounded-circle position-relative" style="width:160px; height:160px">
-                        <img class="rounded-circle w-100 h-100" src="assets/img/<?= $avatar?>" >
+        <div class="container ">
+            <div class="row ">
+                <!--avatar column ========================================================== -->
+                <div class="col-lg-4 mb-3 mb-lg-0 p-0" >
+                    <div class="p-3 pt-4 bg-white border rounded">
+                        <div class="mb-3 mx-auto rounded-circle position-relative" style="width:160px; height:160px">
+                            <img class="rounded-circle w-100 h-100" src="assets/img/<?= $avatar?>" >
 
-                        <?php if($_SESSION['user'] == $input_username ) { ?>
-                            <div class="avatar-overlay rounded-circle">
-                                <span>
-                                    <i class="fas fa-camera"></i>
-                                </span>
-                            </div>                        
-     
-                        <?php } ?>
-                        
-                        <input type="file" name="avatar" id="avatar" accept="image/*" style="display: none;">
-                    </div>
-
-                    <div class="text-center">
-                        <div><h5><b><?= $hoten?></b></h5></div>
-                        <div>Employee ID: <?= $input_username?></div>
-                    </div>
-
-                    
-                    <?php if($_SESSION['user'] == $input_username) { ?>
-                        <hr>
-                        <div class="btn btn-light d-block mx-auto mb-2 change-avatar-btn">
-                            <i class="fas fa-image mr-1"></i>
-                            Cập nhật ảnh đại diện
+                            <?php if($_SESSION['user'] == $input_username ) { ?>
+                                <div class="avatar-overlay rounded-circle">
+                                    <span>
+                                        <i class="fas fa-camera"></i>
+                                    </span>
+                                </div>                        
+        
+                            <?php } ?>
+                            
+                            <input type="file" name="avatar" id="avatar" accept="image/*" style="display: none;">
                         </div>
-                        <a class="btn btn-light d-block mx-auto" href="reset-password-optional.php">
-                            <i class="fas fa-key mr-1"></i>
-                            Đổi mật khẩu
-                        </a>       
-                    <?php } ?>
+
+                        <div class="text-center">
+                            <div><h5><b><?= $hoten?></b></h5></div>
+                            <div>Employee ID: <?= $input_username?></div>
+                        </div>
+
+                        
+                        <?php if($_SESSION['user'] == $input_username) { ?>
+                            <hr>
+                            <div class="btn btn-light d-block mx-auto mb-2 change-avatar-btn">
+                                <i class="fas fa-image mr-1"></i>
+                                Cập nhật ảnh đại diện
+                            </div>
+                            <a class="btn btn-light d-block mx-auto" href="reset-password-optional.php">
+                                <i class="fas fa-key mr-1"></i>
+                                Đổi mật khẩu
+                            </a>       
+                        <?php } ?>
 
 
+                    </div>
                 </div>
-            </div>
 
-            <!-- info column ================================================================================== -->
-            <div class=" col-lg-8 p-0 px-lg-3 mb-4 mb-lg-0">
+                <!-- info column ================================================================================== -->
+                <div class=" col-lg-8 p-0 px-lg-3 mb-4 mb-lg-0">
 
-                <div class="border p-3 rounded bg-white">
-                    <h5>Thông tin nhân viên</h5>
+                    <div class="border p-3 rounded bg-white">
+                        <h5>Thông tin nhân viên</h5>
 
-                    <hr>
+                        <hr>
 
-                    <div class="form-group mt-3">
-                        <label for="">Mã nhân viên:</label>
-                        <input type="text" class="form-control" id="username" disabled value="<?= $input_username?>">
-                    </div>
-                    <div class="form-group">
-                        <label for="">Tên người dùng:</label>
-                        <input type="text" class="form-control" id="" disabled value="<?= $input_username?>">
-                    </div>
-                    <div class="form-group">
-                        <label for="new-password">Họ và tên:</label>
-                        <input type="text" class="form-control" id="" disabled value="<?= $hoten?>">
-                    </div>
-                    <div class="form-group">
-                        <label for="">Chức vụ:</label>
-                        <input type="text" class="form-control" id="" disabled value="<?= $chucvu?>">
-                    </div>
-                    <div class="form-group mb-0">
-                        <label for="">Phòng ban:</label>
-                        <input type="text" class="form-control" id="" disabled value="<?= $tenphongban?>">
+                        <div class="form-group mt-3">
+                            <label for="">Mã nhân viên:</label>
+                            <input type="text" class="form-control" id="username" disabled value="<?= $input_username?>">
+                        </div>
+                        <div class="form-group">
+                            <label for="">Tên người dùng:</label>
+                            <input type="text" class="form-control" id="" disabled value="<?= $input_username?>">
+                        </div>
+                        <div class="form-group">
+                            <label for="new-password">Họ và tên:</label>
+                            <input type="text" class="form-control" id="" disabled value="<?= $hoten?>">
+                        </div>
+                        <div class="form-group">
+                            <label for="">Chức vụ:</label>
+                            <input type="text" class="form-control" id="" disabled value="<?= $chucvu?>">
+                        </div>
+                        <div class="form-group mb-0">
+                            <label for="">Phòng ban:</label>
+                            <input type="text" class="form-control" id="" disabled value="<?= $tenphongban?>">
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+
+        <?php
+            include_once 'footer.php';
+        ?> 
     </div>
 
-
-    <!-- modal delete employee -->
-    <div class="modal" id="modal-delete" tabindex="-1" role="dialog" >
-        <div class="modal-dialog modal-dialog-centered" role="document">
+    <!-- modal -->
+    <div class="modal" tabindex="-1">
+        <div class="modal-dialog">
             <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Xóa nhân viên?</h5>
-                <button class="close" data-dismiss="modal" aria-label="Close">
+                <div class="modal-header">
+                    <h5 class="modal-title">Lỗi</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                ...
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-light" data-dismiss="modal">Hủy</button>
-                <button id="confirm-delete-btn" class="btn btn-danger" data-dismiss="modal">Xóa</button>
-            </div>
-            </div>
-        </div>
-    </div>
-    
-    <!-- toast -->
-    <div class="toast-container position-fixed">
-        <div class="toast hide overflow-hidden border-0" data-delay="2500">
-            <div class="toast-header bg-secondary text-white border-0 p-3">
-                <span class="text-success mr-2" style="font-size:1.2rem"><i class="fas fa-check-circle"></i></span>
-                <b class="mr-auto toast-header-message">Toast Header</b>
-                <!-- <button class="ml-2 mb-1 close text-white" data-dismiss="toast">&times;</button> -->
-            </div>
-        </div>
-    </div>
+                    </button>
+                </div>
 
-    <?php
-        include_once 'footer.php';
-    ?> 
-</div>
+                <div class="modal-body">
+                    <p class="modal-message">Modal body text goes here.</p>
+                    <button type="button" class="btn btn-light float-right" data-dismiss="modal">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 
 

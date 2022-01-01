@@ -293,6 +293,12 @@ if (window.location.pathname.includes("nhanvien.php")) {
 //quan ly phong ban page==========================================================================================
 if (window.location.pathname.includes("phongban.php")) {
     $(document).ready(function () {
+        //chuc nang linh tinh
+        $("button[type=reset]").click(function (e) { 
+            $("#error-message").empty();
+        });
+        $(".navbar a[href='phongban.php']").addClass("active");
+
         loadDepartment(); //load phong ban
 
         //load phong ban
@@ -342,11 +348,7 @@ if (window.location.pathname.includes("phongban.php")) {
             });  
         }
 
-        //chuc nang linh tinh
-        $("button[type=reset]").click(function (e) { 
-            $("#error-message").empty();
-        });
-        $(".navbar a[href='phongban.php']").addClass("active");
+
 
         //them phong ban 
         $("#add-department-btn").click(function (e) {
@@ -554,20 +556,309 @@ if (window.location.pathname.includes("phongban.php")) {
 
 //quan ly task/nhiem vu page=================================================================================================
 if (window.location.pathname.includes("congviec.php")) {
-    $(".navbar-collapse a[href='congviec.php']").addClass("active");
+    $(document).ready(function () {
+        $(".navbar-collapse a[href='congviec.php']").addClass("active");
+        
+    });
     
     
 }
 
-//don xin nghi phep page=================================================================================================
-if (window.location.pathname.includes("donxinnghiphep.php")) {
-    $(".navbar-collapse a[href='donxinnghiphep.php']").addClass("active");
+
+//nop don nghi phep page=================================================================================================
+if (window.location.pathname.includes("nopdon.php")) {
+    $(document).ready(function () {
+        //chuc nang linh tinh
+        $(".navbar-collapse a[href='nopdon.php']").addClass("active");
+        $(".custom-file-input").on("change", function() {
+            var fileName = $(this).val().split("\\").pop();
+            $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+        });
+
+        //nop don/submit
+        $(".submit-btn").click(function (e) { 
+            e.preventDefault();
+
+            //check input
+            let dayNumber = $("input[id='day-number']").val();
+
+            // if (!$.isNumeric($("input[id='day-number']").val()) || dayNumber < 1) {
+            //     showModal("Lỗi", "Số ngày nghỉ không hợp lệ2.")
+                
+            //     return;
+            // }
+            if (dayNumber < 1) {
+                showModal("Lỗi", "Số ngày nghỉ không hợp lệ.")
+                
+                return;
+            }
+
+            if ($("#remain-days").html() == 0) {
+                showModal("Lỗi", "Bạn không được phép nghỉ thêm ngày nào trong năm nay.")
+
+                return;
+            }
+
+            if (parseInt(dayNumber) > parseInt($("#remain-days").html())) {
+                $(".modal-message").text("Số ngày nghỉ vượt mức cho phép");
+                $('.modal').modal('show')
+                return;
+            }
+
+            let reason = $("textarea[id=reason]").val().trim();
+            if (reason == '') {
+                $(".modal-message").text("Hãy nhập lý do.");
+                $('.modal').modal('show')
+                return;
+            }
+
+
+
+            let userName = $("#username").text(); //#userid tren navbar
+            
+            let fd = new FormData();
+            fd.append('songay', dayNumber);
+            fd.append('lydo', reason);
+            fd.append('username', userName);
+
+            // append file if selected
+            if($('#customFile')[0].files.length > 0 ){
+                let file = $("#customFile")[0].files[0];
+                fd.append('file', file);
+            }
+
+
+            let xhr = new XMLHttpRequest();
+            xhr.open('POST', 'API/nopdon-api.php', true);
+
+            xhr.onload = function() {
+                let data = JSON.parse(this.responseText)
+                if (data.status) {
+                    alert(data.data)
+                    window.location.reload();
+                }
+                else {
+                    showModal("Lỗi", data.data)
+                }
+            }	
+
+            xhr.send(fd);
+
+        });
+
+        //validate file
+        $("#customFile").change(function (e) { 
+            e.preventDefault();
+            console.log(e.target.files[0]);
+
+            let file = e.target.files[0];
+            let ext = file.name.split('.').pop();
+            let invalidExtentions = ['exe', 'sh', 'msi']
+
+            if (invalidExtentions.includes(ext)) {
+                $(".modal-message").text("Tập tin không hợp lệ.");
+                $('.modal').modal('show')
+                e.target.value = ''
+                $(".custom-file-label").text('Choose file');
+                return;
+            }
+            else if (file.size > 10 * 1024 * 1024) {
+                $(".modal-message").text("Kích thước tập tin không được vượt quá 10MB.");
+                $('.modal').modal('show')
+                e.target.value = ''
+                $(".custom-file-label").text('Choose file');
+                return;
+            }
+        });
+        
+
+    });
 
 }
+
+
+//duyet don nghi phep page=================================================================================================
+if (window.location.pathname.includes("duyetdon.php")) {
+    let requestList = []
+    let currentRequestID
+
+    $(document).ready(function () {
+        //chuc nang linh tinh
+        $(".navbar-collapse a[href='duyetdon.php']").addClass("active");
+
+        loadRequest()
+        
+    });
+
+    //load yeu cau nghi phep
+    function loadRequest() {
+        requestList = []
+        $(".request-container").empty()
+        
+        let id = $("#department-id").html();
+
+
+        let fd = new FormData();
+        fd.append('department-id', id);
+
+        let xhr = new XMLHttpRequest();
+        xhr.open('POST', 'API/get-leave-requests.php', true);
+
+        xhr.onload = function() {
+            let data = JSON.parse(this.responseText)
+            if (data.status) {
+                data.data.forEach(function(item, index) {
+                    requestList.push(item);
+
+                    let badgeType = "";
+                    if (item.trangthai == 'waiting') {
+                        badgeType = 'info'
+                    }
+                    else if (item.trangthai == 'approved') {
+                        badgeType = 'success'
+                    }
+                    else if (item.trangthai == 'refused') {
+                        badgeType = 'danger'
+                    }
+
+                    let ngaylap = new Date(item.ngaylap)
+                    let ngaylapTmp = new Date(item.ngaylap)
+                    ngaylapTmp.setHours(0, 0, 0, 0)
+                    
+                    let curDate = new Date()
+                    curDate.setHours(0, 0, 0, 0)
+
+                    let formattedDate = "";
+
+                    //show time or date
+                    if(ngaylapTmp.getTime() === curDate.getTime()) {
+                        formattedDate = ngaylap.toLocaleTimeString('it-IT' , {hour:"numeric", minute:"numeric"})
+                    }
+                    else {
+                        formattedDate = ngaylap.toLocaleDateString('vi-VN', { month:"short", day:"numeric"})
+                    }
+
+                    let request = ` <div onclick="showModal(this)" data-index="${index}" class="btn list-group-item list-group-item-action d-flex align-items-center rounded-0">
+                                        <div style="min-width:76px">
+                                            <div class="badge badge-${badgeType} ">${item.trangthai}</div >
+                                        </div>
+                                        <b>${item.hoten}</b>
+                                        <strong class=" ml-auto" >${formattedDate}</strong>    
+                                    </div>
+                                `
+
+                    $(".request-container").append(request);
+                })
+
+                console.log(requestList);
+            }
+            else {
+                alert(data.data)
+            }
+        }	
+
+        xhr.send(fd);
+    }   
+
+    //show modal of request
+    function showModal(e) {
+        
+        let index = $(e).attr('data-index');
+        $("#hoten").text(requestList[index].hoten);
+        $("#songay").text(requestList[index].songay);
+        $("#employeeid").text(requestList[index].username);
+        $("#reason").text(requestList[index].lydo);
+        $("#file").text(requestList[index].file);
+        $("#status").text(requestList[index].trangthai);
+        $("#file").attr("href", "nghiphep-files/" + requestList[index].file);
+
+        if (requestList[index].trangthai == 'waiting') {
+            $("#status").removeClass("badge-success");
+            $("#status").removeClass("badge-danger");
+            $("#status").addClass("badge-info");
+
+        }
+        else if (requestList[index].trangthai == 'approved') {
+            $("#status").removeClass("badge-info");
+            $("#status").removeClass("badge-danger");
+            $("#status").addClass("badge-success");
+
+        }
+        else {
+            $("#status").removeClass("badge-success");
+            $("#status").removeClass("badge-info");
+            $("#status").addClass("badge-danger");
+        }
+
+
+        if (requestList[index].trangthai != 'waiting') {
+            $(".btn-group").css("display", "none");
+        }
+        else {
+            $(".btn-group").css("display", "inline-flex");
+
+        }
+        
+        currentRequestID = requestList[index].ID
+        
+        $('.modal').modal('show')
+    }
+
+    function approve() {
+        let fd = new FormData();
+        fd.append('ID', currentRequestID);
+
+        let xhr = new XMLHttpRequest();
+        xhr.open('POST', 'API/approve-leave-request.php', true);
+
+        xhr.onload = function() {
+            let data = JSON.parse(this.responseText)
+
+            if (data.status) {
+                $('.modal').modal('hide')
+                alert(data.data)
+                loadRequest()
+            }
+            else {
+                alert(data.data)
+            }
+        }	
+
+        xhr.send(fd);
+    }
+
+    function refuse() {
+        let fd = new FormData();
+        fd.append('ID', currentRequestID);
+
+        let xhr = new XMLHttpRequest();
+        xhr.open('POST', 'API/refuse-leave-request.php', true);
+
+        xhr.onload = function() {
+            let data = JSON.parse(this.responseText)
+
+            if (data.status) {
+                $('.modal').modal('hide')
+                alert(data.data)
+                loadRequest()
+            }
+            else {
+                alert(data.data)
+            }
+        }	
+
+        xhr.send(fd);
+    }
+
+}
+
 
 //profile page
 if (window.location.pathname.includes("profile.php")) {
     $(document).ready(function () {
+        //chuc nang linh tinh
+        $(".navbar-collapse a[href='nhanvien.php']").addClass("active");
+
         $(".change-avatar-btn").click(function (e) { 
             $("input[id=avatar]").click()
         });
@@ -591,7 +882,8 @@ if (window.location.pathname.includes("profile.php")) {
 
             //invalid file
             if (!validExtensions.includes(fileExtension)) {
-                alert("Invalid file extension")
+                showModal("Lỗi", "Chỉ được phép upload tập tin png, jpeg, jpg.")
+                $("input[id=avatar]").val("");
                 return;
             }
 
@@ -653,3 +945,12 @@ $(document).ready(function(){
     });
 });
 
+//show modal
+function showModal(title, message) {
+    $(".modal-title").text(title);
+    $(".modal-message").text(message);
+    $('.modal').modal('show')
+}
+
+//check number
+jqisnum
