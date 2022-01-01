@@ -918,9 +918,6 @@ if (window.location.pathname.includes("profile.php")) {
 
 //all pages===============================================================================================
 $(document).ready(function(){
-    // $('[data-toggle="tooltip"]').tooltip();\
-
-
     //table search 
     $(".search-input").keyup( function() {
         //bo dau
@@ -952,5 +949,4 @@ function showModal(title, message) {
     $('.modal').modal('show')
 }
 
-//check number
-jqisnum
+
