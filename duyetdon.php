@@ -67,7 +67,7 @@
 
     <!-- modal -->
     <div class="modal" tabindex="-1" >
-        <div class="modal-dialog" >
+        <div class="modal-dialog" style="max-width: 650px">
             <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Duyệt yêu cầu</h5>
@@ -78,9 +78,12 @@
 
             <div class="modal-body  ">
                 <div class="d-flex flex-wrap justify-content-between align-items-center px-1">
-                    <div class="d-flex flex-column ">
-                        <h5 id="hoten" class="mb-0">Khoa Lê</h5>
-                        <div id="employeeid" class="text-muted">51900753</div>
+                    <div class="d-flex align-items-center">
+                        <img class="rounded-circle mr-2" id="modal-avatar" height="36" width="36" src="" alt="img">
+                        <div class="d-flex flex-column ">
+                            <b id="hoten" class="mb-0">Khoa Lê</b>
+                            <div id="employeeid" class="text-muted">51900753</div>
+                        </div>
                     </div>
 
                     <div class="d-flex flex-column">

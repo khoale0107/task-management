@@ -123,7 +123,7 @@
                     </div>
 
                     <div class="overflow-auto" style="max-height:480px">
-                        <table class="table mb-0  table-hover" >
+                        <table class="table mb-0 table-striped" >
                             <thead class="bg-light ">
                                 <tr class="">
                                     <th>STT</th>

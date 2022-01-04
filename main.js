@@ -738,15 +738,28 @@ if (window.location.pathname.includes("duyetdon.php")) {
                         formattedDate = ngaylap.toLocaleDateString('vi-VN', { month:"short", day:"numeric"})
                     }
 
-                    let request = ` <div onclick="showModal(this)" data-index="${index}" class="btn list-group-item list-group-item-action d-flex align-items-center rounded-0">
-                                        <div style="min-width:76px">
-                                            <div class="badge badge-${badgeType} ">${item.trangthai}</div >
+                    let request = ` <div onclick="showModal(this)" data-index="${index}" class="btn list-group-item list-group-item-action d-flex align-items-center px-2 px-sm-3  rounded-0">
+                                        <div class="mr-3">
+                                            <img class="rounded-circle" height="36" width="36" src="assets/img/${item.avatar}" alt="img">
                                         </div>
-                                        <b>${item.hoten}</b>
-                                        <strong class=" ml-auto" style="min-width: 72px; text-align: end;">${formattedDate}</strong>    
+
+                                        <div class="flex-grow-1 ellipsis">
+                                            <b>${item.hoten}</b>
+                                        </div>
+                                        
+                                        
+                                        <div class="d-flex flex-column flex-sm-row justify-content-end" style="min-width: 72px; margin-left: 0px; text-align: end;">
+                                            <strong>${formattedDate}</strong>    
+                                            <div class="" style="min-width: 72px">
+                                                <div class="badge badge-${badgeType} ">${item.trangthai}</div >
+                                            </div>
+                                        </div>
                                     </div>
                                 `
 
+                    // <div style="min-width:70px">
+                    // </div>
+                    // <div></div>
                     $(".request-container").append(request);
                 })
 
@@ -764,6 +777,7 @@ if (window.location.pathname.includes("duyetdon.php")) {
     function showModal(e) {
         
         let index = $(e).attr('data-index');
+        $("#modal-avatar").attr("src", `assets/img/${requestList[index].avatar}`);
         $("#hoten").text(requestList[index].hoten);
         $("#songay").text(requestList[index].songay);
         $("#employeeid").text(requestList[index].username);
