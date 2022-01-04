@@ -44,18 +44,14 @@
 
 
             <div class="row">
-                <div class="col">
+                <div class="col p-0 px-sm-3">
                     <div class="border p-3 rounded bg-white">
                         <h5>Danh sách yêu cầu nghỉ phép</h5>
                         <hr class="mt-2 ">
-                        <div class="text-muted mb-2"><b>Phòng ban: <?= $_SESSION['department-name']?></b></div>
+                        <div class="text-muted mb-2"><b>Phòng ban: <?= !!($_SESSION['department-name']) ? $_SESSION['department-name'] : "Tất cả" ?></b></div>
 
                         <div class=" mb-2 request-container">
-    
-
                         </div>
-
-
                     </div>
 
                 </div>
@@ -83,7 +79,7 @@
             <div class="modal-body  ">
                 <div class="d-flex flex-wrap justify-content-between align-items-center px-1">
                     <div class="d-flex flex-column ">
-                        <h5 id="hoten" class=" mb-0">Khoa Lê</h5>
+                        <h5 id="hoten" class="mb-0">Khoa Lê</h5>
                         <div id="employeeid" class="text-muted">51900753</div>
                     </div>
 
@@ -97,11 +93,11 @@
                     </div>
                 </div>
 
-                <hr class="mt-1 mb-2">
+                <hr class="mt-1 mb-2 bg-secondary">
                 <div id="reason" class="px-2" style="min-height:5rem"></div>
-                <hr class="mt-1 mb-2">
+                <hr class="mt-1 mb-2 bg-light">
 
-                <div class="px-2">
+                <div class="px-2 mb-3">
                     File đính kèm:<a href="#" id="file" class="ml-2" download></a>
                 </div>
 

@@ -12,7 +12,7 @@
         //                     AND nghiphep.username = account.username
         //                     ORDER BY ngaylap DESC");
 
-        $stmt = $conn->prepare("SELECT nghiphep.*, hoten FROM nghiphep, account 
+        $stmt = $conn->prepare("SELECT nghiphep.*, hoten, avatar FROM nghiphep, account 
                                 WHERE nghiphep.username = account.username AND maphongban = ? AND chucvu != 'Trưởng phòng'
                                 ORDER BY ngaylap DESC");
         
@@ -20,7 +20,7 @@
     }
     else {
         //Admin
-        $stmt = $conn->prepare("SELECT nghiphep.*, hoten FROM nghiphep, account 
+        $stmt = $conn->prepare("SELECT nghiphep.*, hoten, avatar FROM nghiphep, account 
                                 WHERE nghiphep.username = account.username AND chucvu = 'Trưởng phòng'
                                 ORDER BY ngaylap DESC");
     }

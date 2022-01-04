@@ -582,16 +582,16 @@ if (window.location.pathname.includes("nopdon.php")) {
             //check input
             let dayNumber = $("input[id='day-number']").val();
 
-            // if (!$.isNumeric($("input[id='day-number']").val()) || dayNumber < 1) {
-            //     showModal("Lỗi", "Số ngày nghỉ không hợp lệ2.")
-                
-            //     return;
-            // }
-            if (dayNumber < 1) {
-                showModal("Lỗi", "Số ngày nghỉ không hợp lệ.")
+            if (!$.isNumeric(dayNumber) || dayNumber < 1) {
+                showModal("Lỗi", "Số ngày nghỉ không hợp lệ2.")
                 
                 return;
             }
+            // if (dayNumber < 1) {
+            //     showModal("Lỗi", "Số ngày nghỉ không hợp lệ.")
+                
+            //     return;
+            // }
 
             if ($("#remain-days").html() == 0) {
                 showModal("Lỗi", "Bạn không được phép nghỉ thêm ngày nào trong năm nay.")
@@ -743,7 +743,7 @@ if (window.location.pathname.includes("duyetdon.php")) {
                                             <div class="badge badge-${badgeType} ">${item.trangthai}</div >
                                         </div>
                                         <b>${item.hoten}</b>
-                                        <strong class=" ml-auto" >${formattedDate}</strong>    
+                                        <strong class=" ml-auto" style="min-width: 72px; text-align: end;">${formattedDate}</strong>    
                                     </div>
                                 `
 
