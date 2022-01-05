@@ -22,7 +22,11 @@
     <link rel="stylesheet" href="style.css">
 </head>
 
-
+<style>
+    .task ~ .task {
+        margin-top: 1rem;
+    }
+</style>
 
 <body>
 <div id="wrapper">
@@ -31,40 +35,13 @@
     ?>
 
     <div class="container ">
-        
-        <div class="row ">
-
-        </div>
-    </div>
-
-    <!-- modal reset password   -->
-    <div class="modal" id="modal-reset" tabindex="-1" role="dialog"  >
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLongTitle">Đặt lại mật khẩu?</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    ...
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-light" data-dismiss="modal">Hủy</button>
-                    <button id="confirm-reset-btn" class="btn btn-primary" data-dismiss="modal">Xác nhận</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <!-- toast -->
-    <div class="toast-container position-fixed">
-        <div class="toast hide overflow-hidden border-0" data-delay="2500">
-            <div class="toast-header bg-secondary text-white border-0 p-3">
-                <span class="text-success mr-2" style="font-size:1.2rem"><i class="fas fa-check-circle"></i></span>
-                <b class="mr-auto toast-header-message">Toast Header</b>
-                <!-- <button class="ml-2 mb-1 close text-white" data-dismiss="toast">&times;</button> -->
+        <div class="row">
+            <div class="col">
+                <h4 class="mb-3">Công việc </h5>
+                
+                <div class="border  task">Công việc 1</div>
+                <div class="border task">Công việc 1</div>
+                <div class="border task">Công việc 1</div>
             </div>
         </div>
     </div>

@@ -51,7 +51,7 @@
 
     if (!file_exists("../nghiphep-files/$file_name")) {
         //success
-        move_uploaded_file($file_tmp, "../nghiphep-files/$file_name");
+        move_uploaded_file($file_tmp, "../assets/files-nghiphep/$file_name");
     }
     
     die(json_encode(array('status' => true, 'code' => 0, 'data' => 'Nộp đơn thành công')));

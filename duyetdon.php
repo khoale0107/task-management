@@ -65,12 +65,12 @@
     </div>
 
 
-    <!-- modal -->
-    <div class="modal" tabindex="-1" >
+    <!--request modal-->
+    <div class="modal" id="request-modal" tabindex="-1" >
         <div class="modal-dialog" style="max-width: 650px">
             <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Duyệt yêu cầu</h5>
+                <h5>Duyệt yêu cầu</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
                 </button>
@@ -112,6 +112,8 @@
 
         </div>
     </div>
+
+
 </body>
 
 <script src="main.js"></script>
