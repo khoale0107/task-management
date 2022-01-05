@@ -11,19 +11,37 @@
         die(json_encode(array('status' => false, 'code' => 2, 'data' => 'No img uploaded')));
     }
 
+    $username = $_POST['username'];
     $file_name = $_FILES['avatar']['name'];
     $file_tmp =$_FILES['avatar']['tmp_name'];
     $file_extension = pathinfo($file_name, PATHINFO_EXTENSION);
-    
     $valid_extensions= array("png","jpg","jpeg");
-    
+
     //invalid extension
     if(!in_array($file_extension, $valid_extensions)){
         die(json_encode(array('status' => false, 'code' => 3, 'data' => 'Extension not allowed!')));
     }
+    
+    //delete old avatar from server ======================================================================================
+    $stmt = $conn->prepare('SELECT avatar FROM account WHERE username = ?');
+    $stmt->bind_param("s" ,$username);
 
-    //delete old avatar from sv ======================================================================================
-    $username = $_POST['username'];
+    if (!$stmt->execute()) {
+        die(json_encode(array('status' => false, 'data' => $stmt->error)));
+    }
+    
+    $result = $stmt->get_result();
+    $row = $result->fetch_assoc();
+    if ($result->num_rows == 0) {
+        die(json_encode(array('status' => false, 'code' => 3, 'data' => 'User not found')));
+    }
+
+    if ($row['avatar'] != 'default_avatar.png') {
+        if (file_exists('../assets/img/'.$row['avatar'])) {
+            unlink('../assets/img/'.$row['avatar']);
+        }
+    }
+
     $unique_avatar_name = bin2hex(random_bytes(16))."_avatar.png";
 
     //append new avatar to sv ==========================================================================================  
@@ -45,9 +63,7 @@
             die(json_encode(array('status' => false, 'code' => 5, 'data' => 'Failed! Something is wrong, please try again!')));
         }
 
-        if (file_exists('../assets/img/'.$unique_avatar_name)) {
-            unlink('../assets/img/'.$unique_avatar_name);
-        }        
+       
     }
     else {
         die(json_encode(array('status' => false, 'code' => 6, 'data' => 'User not found')));
