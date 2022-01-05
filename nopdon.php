@@ -147,7 +147,7 @@
                                                     <?php
                                                         if ($row['file'] != '') {
                                                             $file =  $row['file'];
-                                                            echo "<a href='nghiphep-files/$file' download>$file</a>";
+                                                            echo "<a href='assets/files-nghiphep/$file' download>$file</a>";
                                                         }
                                                         else echo '-';
                                                     ?>
@@ -180,7 +180,7 @@
     </div>
 
     <!-- modal -->
-    <div class="modal" tabindex="-1">
+    <div class="modal" id="noti-modal" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">

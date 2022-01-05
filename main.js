@@ -581,40 +581,30 @@ if (window.location.pathname.includes("nopdon.php")) {
 
             //check input
             let dayNumber = $("input[id='day-number']").val();
+            console.log("heck:" + typeof dayNumber);
 
-            if (!$.isNumeric(dayNumber) || dayNumber < 1) {
-                showModal("Lỗi", "Số ngày nghỉ không hợp lệ2.")
-                
+            if (!$.isNumeric(dayNumber) || dayNumber < 1 || !Number.isInteger(Number(dayNumber))) {
+                showModal("Lỗi", "Số ngày nghỉ không hợp lệ.")
                 return;
             }
-            // if (dayNumber < 1) {
-            //     showModal("Lỗi", "Số ngày nghỉ không hợp lệ.")
-                
-            //     return;
-            // }
 
             if ($("#remain-days").html() == 0) {
-                showModal("Lỗi", "Bạn không được phép nghỉ thêm ngày nào trong năm nay.")
-
+                showModal("Đã hết số ngày được nghỉ", "Bạn không được phép nghỉ thêm ngày nào trong năm nay.")
                 return;
             }
 
             if (parseInt(dayNumber) > parseInt($("#remain-days").html())) {
-                $(".modal-message").text("Số ngày nghỉ vượt mức cho phép");
-                $('.modal').modal('show')
+                showModal("Lỗi", "Số ngày nghỉ vượt mức cho phép.")
                 return;
             }
 
             let reason = $("textarea[id=reason]").val().trim();
             if (reason == '') {
-                $(".modal-message").text("Hãy nhập lý do.");
-                $('.modal').modal('show')
+                showModal("Lỗi", "Hãy nhập lý do.")
                 return;
             }
 
-
-
-            let userName = $("#username").text(); //#userid tren navbar
+            let userName = $("#username").text(); //#username tren navbar
             
             let fd = new FormData();
             fd.append('songay', dayNumber);
@@ -627,10 +617,8 @@ if (window.location.pathname.includes("nopdon.php")) {
                 fd.append('file', file);
             }
 
-
             let xhr = new XMLHttpRequest();
             xhr.open('POST', 'API/nopdon-api.php', true);
-
             xhr.onload = function() {
                 let data = JSON.parse(this.responseText)
                 if (data.status) {
@@ -643,7 +631,6 @@ if (window.location.pathname.includes("nopdon.php")) {
             }	
 
             xhr.send(fd);
-
         });
 
         //validate file
@@ -656,15 +643,13 @@ if (window.location.pathname.includes("nopdon.php")) {
             let invalidExtentions = ['exe', 'sh', 'msi']
 
             if (invalidExtentions.includes(ext)) {
-                $(".modal-message").text("Tập tin không hợp lệ.");
-                $('.modal').modal('show')
+                showModal("Lỗi", "Tập tin không hợp lệ.")
                 e.target.value = ''
                 $(".custom-file-label").text('Choose file');
                 return;
             }
             else if (file.size > 10 * 1024 * 1024) {
-                $(".modal-message").text("Kích thước tập tin không được vượt quá 10MB.");
-                $('.modal').modal('show')
+                showModal("Lỗi", "Kích thước tập tin không được vượt quá 10MB.")
                 e.target.value = ''
                 $(".custom-file-label").text('Choose file');
                 return;
@@ -738,7 +723,7 @@ if (window.location.pathname.includes("duyetdon.php")) {
                         formattedDate = ngaylap.toLocaleDateString('vi-VN', { month:"short", day:"numeric"})
                     }
 
-                    let request = ` <div onclick="showModal(this)" data-index="${index}" class="btn list-group-item list-group-item-action d-flex align-items-center px-2 px-sm-3  rounded-0">
+                    let request = ` <div onclick="showRequestModal(this)" data-index="${index}" class="btn list-group-item list-group-item-action d-flex align-items-center px-2 px-sm-3  rounded-0">
                                         <div class="mr-3">
                                             <img class="rounded-circle" height="36" width="36" src="assets/img/${item.avatar}" alt="img">
                                         </div>
@@ -756,10 +741,6 @@ if (window.location.pathname.includes("duyetdon.php")) {
                                         </div>
                                     </div>
                                 `
-
-                    // <div style="min-width:70px">
-                    // </div>
-                    // <div></div>
                     $(".request-container").append(request);
                 })
 
@@ -774,7 +755,7 @@ if (window.location.pathname.includes("duyetdon.php")) {
     }   
 
     //show modal of request
-    function showModal(e) {
+    function showRequestModal(e) {
         
         let index = $(e).attr('data-index');
         $("#modal-avatar").attr("src", `assets/img/${requestList[index].avatar}`);
@@ -784,7 +765,7 @@ if (window.location.pathname.includes("duyetdon.php")) {
         $("#reason").text(requestList[index].lydo);
         $("#file").text(requestList[index].file);
         $("#status").text(requestList[index].trangthai);
-        $("#file").attr("href", "nghiphep-files/" + requestList[index].file);
+        $("#file").attr("href", "assets/files-nghiphep/" + requestList[index].file);
 
         if (requestList[index].trangthai == 'waiting') {
             $("#status").removeClass("badge-success");
@@ -815,7 +796,7 @@ if (window.location.pathname.includes("duyetdon.php")) {
         
         currentRequestID = requestList[index].ID
         
-        $('.modal').modal('show')
+        $('#request-modal').modal('show')
     }
 
     function approve() {
@@ -829,8 +810,8 @@ if (window.location.pathname.includes("duyetdon.php")) {
             let data = JSON.parse(this.responseText)
 
             if (data.status) {
-                $('.modal').modal('hide')
-                alert(data.data)
+                $('#request-modal').modal('hide')
+                showModal("Hoàn tất", data.data)
                 loadRequest()
             }
             else {
@@ -839,6 +820,7 @@ if (window.location.pathname.includes("duyetdon.php")) {
         }	
 
         xhr.send(fd);
+
     }
 
     function refuse() {
@@ -852,8 +834,8 @@ if (window.location.pathname.includes("duyetdon.php")) {
             let data = JSON.parse(this.responseText)
 
             if (data.status) {
-                $('.modal').modal('hide')
-                alert(data.data)
+                $('#request-modal').modal('hide')
+                showModal("Hoàn tất", data.data)
                 loadRequest()
             }
             else {
@@ -919,7 +901,7 @@ if (window.location.pathname.includes("profile.php")) {
                         window.location.reload();
                     }
                     else {
-                        alert(data.data)
+                        showModal("Lỗi", data.data)
                     }
                 },
                 dataType: 'json'
@@ -956,11 +938,35 @@ $(document).ready(function(){
     });
 });
 
-//show modal
 function showModal(title, message) {
-    $(".modal-title").text(title);
-    $(".modal-message").text(message);
-    $('.modal').modal('show')
+    let notiModal =`<div class="modal" id="noti-modal" tabindex="-1">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">${title}</h5>
+                                    <button type="button" onclick="removeModal()" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+
+                                <div class="modal-body">
+                                    <p class="modal-message">${message}</p>
+                                    <button type="button" onclick="removeModal()" class="btn btn-light float-right" data-dismiss="modal">Đóng</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `
+
+    $("body").append(notiModal);
+    $(notiModal).modal('show');
+
+}
+
+function removeModal() {
+    // console.log($(e).closest(".modal"));
+    $(".modal").remove();
+    $(".modal-backdrop").remove();
 }
 
 
