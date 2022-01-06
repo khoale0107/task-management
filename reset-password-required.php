@@ -25,8 +25,8 @@
     <div class="container">
         <div class=" col-md-7 col-lg-5 bg-white mx-auto mt-5 pt-5 pb-4 shadow-lg rounded-lg border" >
             <div class="col">
-                <h5 class='   text-primary'>Đổi mật khẩu để tiếp tục</h5>
-                <hr>
+                <h5 class='text-primary'>Đổi mật khẩu để tiếp tục</h5>
+                <hr class="mt-2">
                 
                 <form>
                     <div class="">

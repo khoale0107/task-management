@@ -85,3 +85,27 @@ img {
     white-space: nowrap;
     overflow: hidden;
 }
+
+.btn-white {
+    color: #212529;
+    background-color: var(--white);
+    border-color: #f8f9fa;
+    cursor: pointer;
+}
+  
+.btn-white:hover {
+    color: #212529;
+    background-color: #eef1f5;
+    border-color: #dae0e5;
+}
+  
+.btn-white:active, .btn-white.focus {
+    color: #212529;
+    background-color: #d8dbdf;
+    border-color: #dae0e5;
+    box-shadow: 0 0 0 0.2rem rgba(216, 217, 219, 0.5);
+}
+
+.task ~ .task {
+    margin-top: 0.8rem;
+}
