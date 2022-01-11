@@ -1,3 +1,8 @@
+let departmentid = $("#department-id").text();
+let employeeid = $("#username").text();
+let chucvu = $("#permission").text();
+console.log(chucvu);
+
 //login page=================================================================================
 if (window.location.pathname.includes("login.php")) {
     $(document).ready(function () {
@@ -23,7 +28,6 @@ if (window.location.pathname.includes("login.php")) {
             //send login request
             $.post('API/handle-login.php', {username, password, rememberCheck}, function(data) {
                 if (data.status) {
-                    console.log(data);
                     window.location.replace("index.php");
                 }
                 else {
@@ -75,7 +79,6 @@ if (window.location.pathname.includes('reset-password')) {
                     $("#error-message").removeClass('text-success')
                     $("#error-message").addClass('text-danger').text(data.data);
                 }
-                console.log(data.data);
             }, 'json')
         .fail(function(xhr, status, error) {
             alert("Cannot connect to handle-reset-password.php:"  + xhr.responseText);
@@ -167,7 +170,6 @@ if (window.location.pathname.includes("nhanvien.php")) {
             let fullname = $("input[name=fullname]").val().trim();
             let departmentid = $("form .select-department").val()
 
-            console.log(departmentid);
             //check input
             if (employeeid == '' || fullname == '') {
                 $("#error-message").removeClass("text-success").addClass("text-danger")
@@ -437,9 +439,6 @@ if (window.location.pathname.includes("phongban.php")) {
             let departmentid = $('#modal-assign-manager').attr('departmentid')
             let employeeid = $('input[name=username]:checked').val();
 
-            console.log(employeeid);
-            console.log(departmentid);
-            
             $.post('API/update-department-manager.php', {departmentid, employeeid},
             function(data) {
                 if (data.status) {
@@ -490,8 +489,6 @@ if (window.location.pathname.includes("phongban.php")) {
         $('#modal-assign-manager').attr('departmentid', departmentid)
         $("#modal-assign-manager .modal-title").text(`${departmentName}`);
         $("#assign-btn").attr('disabled', true);
-
-
         $('#modal-assign-manager').modal('show')
         
         //load nhan vien theo phong ban
@@ -554,16 +551,359 @@ if (window.location.pathname.includes("phongban.php")) {
 }
 
 
-//quan ly task/nhiem vu page=================================================================================================
+//quan ly task/cong viec page=================================================================================================
 if (window.location.pathname.includes("congviec.php")) {
     $(document).ready(function () {
+        loadTask();
+
+        //chuc nang linh tinh
         $(".navbar-collapse a[href='congviec.php']").addClass("active");
+        $(".btn-addtask").click(function (e) { 
+            $("#modal-addtask").modal('show');
+            $(".error-msg").remove();
+        });
+
         
+        //load nhan vien theo phong ban vao select box
+        $.post('API/get-employees-by-department.php', {departmentid},
+            function(data) {
+                if (data.status) {
+                    data.data.forEach(nhanvien => {
+                        let {username, hoten, chucvu} = nhanvien
+
+                        if (chucvu != 'Trưởng phòng') {
+                            let option = `<option value="${username}">${hoten}</option>`
+                            $("#emp-select").append(option);
+                        }
+                    });
+                } else {
+                    alert(data.data)
+                }
+            }, 'json')
+        .fail(function(xhr, status, error) {
+            alert("Cannot connect to get-employees-by-department.php:" + xhr.responseText);
+        });
     });
+
+    //load danh sach task
+    function loadTask() {
+        $(".task-container").empty()
+
+        let fd = new FormData();
+        fd.append('departmentid', departmentid);
+        fd.append('chucvu', chucvu);
+        fd.append('username', employeeid);
+        
+        let xhr = new XMLHttpRequest();
+        xhr.open('POST', 'API/get-tasks.php', true);
+        xhr.onload = function() {
+            let data = JSON.parse(this.responseText)
+            if (data.status) {
+                data.data.forEach(function(task) {
+                    let badgeType = "";
+                    if (task.trangthai == 'New') {
+                        badgeType = 'info'
+                    }
+                    if (task.trangthai == 'In progress') {
+                        badgeType = 'info'
+                    }
+                    if (task.trangthai == 'Waiting') {
+                        badgeType = 'primary'
+                    }
+                    if (task.trangthai == 'Canceled') {
+                        badgeType = 'secondary'
+                    }
+                    else if (task.trangthai == 'Rejected') {
+                        badgeType = 'danger'
+                    }
+                    else if (task.trangthai == 'Completed') {
+                        badgeType = 'success'
+                    }
+
+                    let updateTime = new Date(task.updatetime)
+                    let updateTimeTmp = new Date(task.updatetime)
+                    updateTimeTmp.setHours(0, 0, 0, 0)
+                    
+                    let curDate = new Date()
+                    curDate.setHours(0, 0, 0, 0)
+
+                    let formattedDate = "";
+
+                    //show time or date
+                    if(updateTimeTmp.getTime() === curDate.getTime()) {
+                        formattedDate = updateTime.toLocaleTimeString('it-IT' , {hour:"numeric", minute:"numeric"})
+                    }
+                    else {
+                        formattedDate = updateTime.toLocaleDateString('vi-VN', { month:"short", day:"numeric"})
+                    }
+
+                    let taskElement = `<a href="task.php?id=${task.ID}" class="d-flex align-items-center  border rounded btn-white p-3 task">
+                                    <i class="fas fa-clipboard-list mr-3" style="font-size:2rem"></i>
+                                    <div class="d-flex flex-column flex-grow-1" style="width:0px">
+                                        <div class="ellipsis task-name"><b>${task.tieude}</b></div>
+                                        <div class="ellipsis">${task.hoten}</div>
+                                    </div>
+
+                                    <div class="d-flex flex-column" style="min-width: 72px;text-align: end;">
+                                        <strong class="text-decoration-none">${formattedDate}</strong>    
+                                        <div class="" style="min-width: 72px">
+                                            <div class="badge badge-${badgeType} ">${task.trangthai}</div>
+                                        </div>
+                                    </div>
+                                </a>
+                    
+                                `
+
+                    if (task.trangthai == 'Canceled') {
+                        if (chucvu == "Trưởng phòng") {
+                            $(".task-container").append(taskElement);
+                        }
+                    }
+                    else {
+                        $(".task-container").append(taskElement);
+                    }
+                })
+
+            }
+            else {
+                // alert(data.data)
+            }
+        }	
+        xhr.send(fd);
+    }
     
+    //Them task/cong viec moi
+    function addTask() {
+        let taskName = $("input[id='task-name']").val().trim();
+        let taskDescription = $("textarea[id='task-description']").val().trim();
+        let employeeid = $("#emp-select").val()
+        let dueDate = $("#duedate").val()
+        
+        if (taskName == '' || taskDescription == '') {
+            showModal("Lỗi", "Hãy nhập đủ thông tin.")
+            return;
+        }
+        if (employeeid == '' ) {
+            showModal("Lỗi", "Hãy chọn nhân viên.")
+            return;
+        }
+        if (dueDate == '' ) {
+            showModal("Lỗi", "Hãy đặt thời hạn.")
+            return;
+        }
+
+        let curDateObj = new Date();
+        let dueDateObj = new Date(dueDate);
+        if (curDateObj > dueDateObj) {
+            showModal("Lỗi", "Deadline phải lớn hớn thời gian hiện tại.")
+            return;
+        }
+
+        let fd = new FormData();
+        fd.append('tieude', taskName);
+        fd.append('mota', taskDescription);
+        fd.append('username', employeeid);
+        fd.append('duedate', dueDate);
+
+        // append file if selected
+        if($('#customFile')[0].files.length > 0 ){
+            let file = $("#customFile")[0].files[0];
+            fd.append('file', file);
+        }
+
+        let xhr = new XMLHttpRequest();
+        xhr.open('POST', 'API/add-task.php', true);
+        xhr.onload = function() {
+            let data = JSON.parse(this.responseText)
+            if (data.status) {
+                showModal("Hoàn tất", data.data)
+                $("#modal-addtask").modal('hide');
+                $("#customFile").val('')
+                $(".custom-file-label").text('Choose file');
+                loadTask();
+            }
+            else {
+                showModal("Lỗi", data.data)
+            }
+        }	
+        xhr.send(fd);
+    }
     
 }
 
+//chi tiet task page
+if (window.location.pathname.includes("task.php")) {
+    let taskID = $("#task-id").text();
+    
+    $(document).ready(function () {
+        //chuc nang linh tinh
+        $(".navbar-collapse a[href='congviec.php']").addClass("active");
+        $(".emo-list label").click(function (e) { 
+            $(".emo-list .bg-lightdark").removeClass("bg-lightdark");
+            $(this).addClass('bg-lightdark');
+        });
+
+        //show submit modal
+        $("#btn-submit").click(function (e) { 
+            $("#modal-submit").modal('show');
+        });
+
+        //show reject modal
+        $("#btn-reject").click(function (e) { 
+            $("#modal-reject").modal('show');
+        });
+
+        //show approve modal
+        $("#btn-approve").click(function (e) { 
+            $("#modal-approve").modal('show');
+        });
+    
+        //start task
+        $("#btn-start").click(function (e) { 
+            let fd = new FormData();
+            fd.append('id', $("#task-id").text());
+            fd.append('status', 'In progress');
+    
+            let xhr = new XMLHttpRequest();
+            xhr.open('POST', 'API/update-task-status.php', true);
+    
+            xhr.onload = function() {
+                let data = JSON.parse(this.responseText)
+    
+                if (data.status) {
+                    window.location.reload();
+                }
+                else {
+                    showModal("Lỗi", data.data)
+                }
+            }	
+            xhr.send(fd);
+        });
+    
+        //Cancel task
+        $("#btn-cancel").click(function (e) {
+            let fd = new FormData();
+            fd.append('id', $("#task-id").text());
+            fd.append('status', 'Canceled');
+    
+            let xhr = new XMLHttpRequest();
+            xhr.open('POST', 'API/update-task-status.php', true);
+    
+            xhr.onload = function() {
+                let data = JSON.parse(this.responseText)
+    
+                if (data.status) {
+                    window.location.reload();
+                }
+                else {
+                    showModal("Lỗi", data.data)
+                }
+            }	
+            xhr.send(fd);
+        });
+
+    });
+
+    //submit task
+    function submitTask() {
+        let submitContent = $("#submit-description").val().trim()
+        if (submitContent == '') {
+            showModal("Lỗi", "Hãy nhập mô tả.")
+            return;
+        }
+
+        let fd = new FormData();
+        fd.append('content', submitContent);
+        fd.append('taskid', taskID);
+        fd.append('username', employeeid);
+
+        // append file if selected
+        if($('#customFile')[0].files.length > 0 ){
+            let file = $("#customFile")[0].files[0];
+            fd.append('file', file);
+        }
+
+        let xhr = new XMLHttpRequest();
+        xhr.open('POST', 'API/response-task.php', true);
+        xhr.onload = function() {
+            let data = JSON.parse(this.responseText)
+            if (data.status) {
+                window.location.reload();
+            }
+            else {
+                showModal("Lỗi", data.data)
+            }
+        }	
+        xhr.send(fd);
+    }
+
+    //reject task
+    function rejectTask() {
+        let rejectContent = $("#reject-description").val().trim()
+        if (rejectContent == '') {
+            showModal("Lỗi", "Hãy nhập ghi chú.")
+            return;
+        }
+
+        let fd = new FormData();
+        fd.append('content', rejectContent);
+        fd.append('taskid', taskID);
+        fd.append('username', employeeid);
+
+        // append file if selected
+        if($('#customFile')[0].files.length > 0 ){
+            let file = $("#customFile")[0].files[0];
+            fd.append('file', file);
+        }
+
+        //set new duedate if specified
+        if ($("#new-duedate").val()) {
+            fd.append('newduedate', $("#new-duedate").val());
+        }
+
+        let xhr = new XMLHttpRequest();
+        xhr.open('POST', 'API/response-task.php', true);
+        xhr.onload = function() {
+            let data = JSON.parse(this.responseText)
+            if (data.status) {
+                window.location.reload();
+            }
+            else {
+                showModal("Lỗi", data.data)
+            }
+        }	
+        xhr.send(fd);
+    }
+
+    //approve task
+    function approveTask() {
+        let rating = document.querySelector("input[name='task-rate']:checked")
+        if (!rating) {
+            showModal("Bạn chưa đánh giá", "Hãy chọn mức độ hoàn thành")
+            return
+        }
+
+        let fd = new FormData();
+        fd.append('id', $("#task-id").text());
+        fd.append('username', employeeid);
+        fd.append('rating', rating.value);
+
+        let xhr = new XMLHttpRequest();
+        xhr.open('POST', 'API/approve-task.php', true);
+
+        xhr.onload = function() {
+            let data = JSON.parse(this.responseText)
+
+            if (data.status) {
+                window.location.reload();
+            }
+            else {
+                showModal("Lỗi", data.data)
+            }
+        }	
+        xhr.send(fd);
+    }
+}
 
 //nop don nghi phep page=================================================================================================
 if (window.location.pathname.includes("nopdon.php")) {
@@ -581,7 +921,6 @@ if (window.location.pathname.includes("nopdon.php")) {
 
             //check input
             let dayNumber = $("input[id='day-number']").val();
-            console.log("heck:" + typeof dayNumber);
 
             if (!$.isNumeric(dayNumber) || dayNumber < 1 || !Number.isInteger(Number(dayNumber))) {
                 showModal("Lỗi", "Số ngày nghỉ không hợp lệ.")
@@ -633,30 +972,6 @@ if (window.location.pathname.includes("nopdon.php")) {
             xhr.send(fd);
         });
 
-        //validate file
-        $("#customFile").change(function (e) { 
-            e.preventDefault();
-            console.log(e.target.files[0]);
-
-            let file = e.target.files[0];
-            let ext = file.name.split('.').pop();
-            let invalidExtentions = ['exe', 'sh', 'msi']
-
-            if (invalidExtentions.includes(ext)) {
-                showModal("Lỗi", "Tập tin không hợp lệ.")
-                e.target.value = ''
-                $(".custom-file-label").text('Choose file');
-                return;
-            }
-            else if (file.size > 10 * 1024 * 1024) {
-                showModal("Lỗi", "Kích thước tập tin không được vượt quá 10MB.")
-                e.target.value = ''
-                $(".custom-file-label").text('Choose file');
-                return;
-            }
-        });
-        
-
     });
 
 }
@@ -672,23 +987,18 @@ if (window.location.pathname.includes("duyetdon.php")) {
         $(".navbar-collapse a[href='duyetdon.php']").addClass("active");
 
         loadRequest()
-        
     });
 
-    //load yeu cau nghi phep
+    //load danh sach yeu cau
     function loadRequest() {
         requestList = []
         $(".request-container").empty()
-        
-        let id = $("#department-id").html();
-
 
         let fd = new FormData();
-        fd.append('department-id', id);
+        fd.append('department-id', departmentid);
 
         let xhr = new XMLHttpRequest();
         xhr.open('POST', 'API/get-leave-requests.php', true);
-
         xhr.onload = function() {
             let data = JSON.parse(this.responseText)
             if (data.status) {
@@ -744,13 +1054,11 @@ if (window.location.pathname.includes("duyetdon.php")) {
                     $(".request-container").append(request);
                 })
 
-                console.log(requestList);
             }
             else {
                 alert(data.data)
             }
         }	
-
         xhr.send(fd);
     }   
 
@@ -818,10 +1126,9 @@ if (window.location.pathname.includes("duyetdon.php")) {
                 alert(data.data)
             }
         }	
-
         xhr.send(fd);
-
     }
+
 
     function refuse() {
         let fd = new FormData();
@@ -842,10 +1149,8 @@ if (window.location.pathname.includes("duyetdon.php")) {
                 alert(data.data)
             }
         }	
-
         xhr.send(fd);
     }
-
 }
 
 
@@ -883,7 +1188,6 @@ if (window.location.pathname.includes("profile.php")) {
                 return;
             }
 
-            //valid img
             let formData = new FormData();
             formData.append('avatar', file)
             formData.append('username', $("input[id=username]").val())
@@ -914,6 +1218,9 @@ if (window.location.pathname.includes("profile.php")) {
 
 //all pages===============================================================================================
 $(document).ready(function(){
+    //tooltip
+    $('[data-toggle="tooltip"]').tooltip();
+
     //table search 
     $(".search-input").keyup( function() {
         //bo dau
@@ -930,43 +1237,80 @@ $(document).ready(function(){
         });
     });
 
+    //custom file input
+    $(".custom-file-input").on("change", function() {
+        var fileName = $(this).val().split("\\").pop();
+        $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+    });
+
+
     //clear search box
     $("#clear-searchbox-btn").click(function (e) {
         let searchbox = $(this).siblings(".search-input");
         searchbox.val("");
         $(".search-input").keyup();
     });
+
+
+    //validate file
+    $(".custom-file-input").change(function (e) { 
+        e.preventDefault();
+
+        let file = e.target.files[0];
+        let ext = file.name.split('.').pop();
+        let invalidExtentions = ['exe', 'sh', 'msi']
+
+        if (invalidExtentions.includes(ext)) {
+            showModal("Lỗi", "Tập tin không hợp lệ.")
+            e.target.value = ''
+            $(".custom-file-label").text('Choose file');
+            return;
+        }
+        else if (file.size > 10 * 1024 * 1024) {
+            showModal("Lỗi", "Kích thước tập tin không được vượt quá 10MB.")
+            e.target.value = ''
+            $(".custom-file-label").text('Choose file');
+            return;
+        }
+    });
 });
 
 function showModal(title, message) {
-    let notiModal =`<div class="modal" id="noti-modal" tabindex="-1">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title">${title}</h5>
-                                    <button type="button" onclick="removeModal()" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-
-                                <div class="modal-body">
-                                    <p class="modal-message">${message}</p>
-                                    <button type="button" onclick="removeModal()" class="btn btn-light float-right" data-dismiss="modal">Đóng</button>
+    if (!document.getElementById("noti-modal")) {
+        let notiModal =`<div class="modal" id="noti-modal" data-backdrop="static" tabindex="-1" style="z-index:1070">
+                            <div class="modal-dialog " style="max-width:350px;">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">${title}</h5>
+                                        <button type="button" onclick="removeModal()" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+    
+                                    <div class="modal-body">
+                                        <p class="modal-message">${message}</p>
+                                        <button type="button" onclick="removeModal()" class="btn btn-light float-right" data-dismiss="modal">Đóng</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                `
-
-    $("body").append(notiModal);
-    $(notiModal).modal('show');
+                    `
+        $("body").append(notiModal);
+        $(notiModal).modal('show');
+    }
+    else {
+        $("#noti-modal .modal-title").text(title);
+        $("#noti-modal .modal-message").text(message);
+        $("#noti-modal").modal('show');
+        
+    }
+    
+    $(".modal-backdrop").css("z-index", "1060");
 
 }
 
 function removeModal() {
-    // console.log($(e).closest(".modal"));
-    $(".modal").remove();
-    $(".modal-backdrop").remove();
+    $(".modal-backdrop").css("z-index", "1040");
 }
 
 

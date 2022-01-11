@@ -41,10 +41,8 @@
         <?php include 'navbar.php'; ?>
 
         <div class="container">
-
-
-            <div class="row">
-                <div class="col p-0 px-sm-3">
+            <div class="row px-sm-5">
+                <div class="col p-0 px-sm-5">
                     <div class="border p-3 rounded bg-white">
                         <h5>Danh sách yêu cầu nghỉ phép</h5>
                         <hr class="mt-2 ">
@@ -58,8 +56,6 @@
             </div>
 
         </div>
-
-        <div id="department-id" style="display:none"><?= $_SESSION['department-id']?></div>
 
         <?php include_once 'footer.php'; ?> 
     </div>
@@ -77,21 +73,22 @@
             </div>
 
             <div class="modal-body  ">
-                <div class="d-flex flex-wrap justify-content-between align-items-center px-1">
-                    <div class="d-flex align-items-center">
-                        <img class="rounded-circle mr-2" id="modal-avatar" height="36" width="36" src="" alt="img">
-                        <div class="d-flex flex-column ">
-                            <b id="hoten" class="mb-0">Khoa Lê</b>
+                <div class="d-flex flex-column flex-sm-row mb-2">
+                    <div class="d-flex mb-2 flex-grow-1">
+                        <img class="rounded-circle align-self-center mr-2" id="modal-avatar" height="36" width="36" src="" alt="img">
+    
+                        <div class="flex-grow-1" style="width:0px">
+                            <div class="" style=""><b id="hoten" class="mb-0">Khoa Lê</b></div>
                             <div id="employeeid" class="text-muted">51900753</div>
                         </div>
                     </div>
 
-                    <div class="d-flex flex-column">
-                        <div class="">
+                    <div class="d-flex flex-row flex-sm-column">
+                        <div class="ml-auto order-1">
                             Trạng thái:<span id="status" class="badge ml-2"></span >
                         </div>
-                        <div class="">
-                            Số ngày yêu cầu:<span id="songay" class="ml-1"></span>
+                        <div class="order-0">
+                            Số ngày yêu cầu:&nbsp<span id="songay"></span>
                         </div>
                     </div>
                 </div>
@@ -118,3 +115,4 @@
 
 <script src="main.js"></script>
 </html>
+

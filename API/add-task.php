@@ -2,20 +2,19 @@
     require_once ('connection.php');
     header('Content-Type: application/json');
 
-    if (empty($_POST['songay']) || empty($_POST['lydo']) || empty($_POST['username'])) {
+    if (empty($_POST['tieude']) || empty($_POST['mota']) || empty($_POST['username']) || empty($_POST['duedate'])) {
         die(json_encode(array('status' => false, 'code' => 1, 'data' => 'Parameters not valid')));
-    }
+    }   
 
-    $songay = $_POST['songay'];
-    $lydo = $_POST['lydo'];
     $username = $_POST['username'];
-
-    if (!filter_var($songay, FILTER_VALIDATE_INT) || $songay < 1) {
-        die(json_encode(array('status' => false, 'code' => 2, 'data' => 'Số ngày không hợp lệ')));
-    }
+    $tieude = $_POST['tieude'];
+    $mota = $_POST['mota'];
+    $duedate = $_POST['duedate'];
 
     $file_name = '';
     $file_tmp = '';
+    $file_folder = '';
+
     if (isset($_FILES['file'])) {
         $file_name = $_FILES['file']['name'];
 
@@ -37,19 +36,23 @@
             echo json_encode(array('status' => false, 'code' => 4, 'data' => 'Kích thước tập tin không được vượt quá 10MB'));
             die();
         }
+        
+        $timestamp = time();
+        $file_folder = "$timestamp/$file_name";
+        mkdir("../assets/files-task/$timestamp");
+        move_uploaded_file($file_tmp, "../assets/files-task/$timestamp/$file_name");
     }
 
 
-    $sql = "CALL xin_nghi_phep('$username', '$songay', '$lydo', '$file_name')";
+    $stmt = $conn->prepare('INSERT INTO `task`(`tieude`, `username`, `duedate`, `mota`, `file`) VALUES (?,?,?,?,?)');
+    $stmt->bind_param("sssss", $tieude, $username, $duedate, $mota, $file_folder);
 
-    if (!$conn->query($sql)) {
-        die(json_encode(array('status' => false, 'code' => 5, 'data' => $conn->error)));
+    if (!$stmt->execute()) {
+        die(json_encode(array('status' => false, 'code' => 2, 'data' => $stmt->error)));
     }
 
-    if (!file_exists("../assets/files-nghiphep/$file_name")) {
-        //success
-        move_uploaded_file($file_tmp, "../assets/files-nghiphep/$file_name");
-    }
+
     
-    die(json_encode(array('status' => true, 'code' => 0, 'data' => 'Nộp đơn thành công')));
+    die(json_encode(array('status' => true, 'code' => 0, 'data' => 'Thêm công việc thành công')));
+
 ?>

@@ -1,0 +1,17 @@
+string query = string.Format("insert into Lop values ('{0}')", id);
+// không caần + string rườm rà
+
+
+
+
+Table item = new Table();
+Button btn = new Button();
+btn.Click += btn_Click;
+btn.Tag = item;
+
+void btn_Click(object sender, EventArgs e)
+{
+	int tableID = (sender as Table).ID;
+	ShowBill(tableID);
+}
+// gắn cho Button 1 tag table để khi click vào lấy đc ID table

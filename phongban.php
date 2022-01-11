@@ -95,7 +95,6 @@
                         </div>
                         <div class="form-group">
                             <label class="control-label" for="description">Mô tả:</label>
-                            <!-- <input type="text" class="form-control" id="description" name="description" placeholder="Mô tả"> -->
                             <textarea class="form-control" rows="5" id="description" name="description" placeholder="Mô tả"></textarea>
 
                         </div>
@@ -140,7 +139,6 @@
                         </div>
                         <div class="form-group">
                             <label class="control-label" for="description-modal">Mô tả:</label>
-                            <!-- <input type="text" class="form-control" id="description-modal" placeholder="Mô tả"> -->
                             <textarea class="form-control" rows="5" id="description-modal"></textarea>
                         </div>
 

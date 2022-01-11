@@ -35,7 +35,7 @@
     $result = $stmt->get_result();
 
     if ($result->num_rows == 0) {
-        die(json_encode(array('status' => false, 'code' => 3, 'data' => 'no rows')));
+        die(json_encode(array('status' => false, 'code' => 3, 'data' => 'Chưa có yêu cầu nào')));
     }
 
     $data = array();

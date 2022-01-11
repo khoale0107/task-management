@@ -44,13 +44,12 @@
     <?php include 'navbar.php'; ?>
 
     <div class="container">
-        <h5>Nộp đơn xin nghỉ phép</h5>
-        <hr class="mt-2 ">
+
 
 
         <div class="row">
             <!--form nop don -->
-            <div class="col-lg-3 mb-3 mb-lg-0 " >
+            <div class="col-lg-3 p-0 px-lg-3 mb-3 mb-lg-0 " >
                 <div class="p-3  bg-white border rounded">
                     <h5>Tạo đơn mới</h5>
                     <div class="dropdown-divider"></div>
@@ -80,7 +79,7 @@
             </div>
 
             <!--lich su nop don -->
-            <div class=" col-lg-9 pl-3 pl-lg-0 mb-4 mb-lg-0">
+            <div class=" col-lg-9 p-0 pl-lg-0 pr-lg-3 mb-4 mb-lg-0">
                 <div class="border p-3 rounded bg-white">
                     <h5>Lịch sử nộp đơn</h5>
                     <div class="dropdown-divider"></div>

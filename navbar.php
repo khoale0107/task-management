@@ -102,17 +102,11 @@
                     }
 
                 ?>
-
-
-
-   
-
-
             </ul>
         </div>  
-
-        
     </div>
+    <div id="department-id" style="display:none"><?= $_SESSION['department-id']?></div>
+    <div id="permission" style="display:none"><?= $_SESSION['permission']?></div>
 </nav>
 
 

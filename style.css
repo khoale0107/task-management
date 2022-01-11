@@ -109,3 +109,15 @@ img {
 .task ~ .task {
     margin-top: 0.8rem;
 }
+
+.task:hover {
+    text-decoration: none !important;
+}
+
+.no-underline-hover:hover {
+    text-decoration: none !important;
+}
+
+.bg-lightdark{
+    background-color: rgb(226, 225, 225)
+}
