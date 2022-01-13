@@ -159,7 +159,6 @@
                                     <label class="control-label" for="">Nhân viên thực hiện:</label>
                                     <select name="cars" class="custom-select" id="emp-select">
                                         <option value="" >Chọn nhân viên</option>
-
                                     </select>
                                 </div>
 

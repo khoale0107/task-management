@@ -101,7 +101,7 @@
                     File đính kèm:<a href="#" id="file" class="ml-2" download></a>
                 </div>
 
-                <div class="btn-group float-right">
+                <div class="button-group float-right">
                     <button type="button" class="btn btn-danger" onclick="refuse()">Refuse</button>
                     <button type="button" class="btn btn-success" onclick="approve()" >Approve</button>
                 </div>

@@ -53,14 +53,23 @@
                 <div class="p-3  bg-white border rounded">
                     <h5>Tạo đơn mới</h5>
                     <div class="dropdown-divider"></div>
-                    <div class="form-group">
+                    
+                    <!-- <div class="form-group">
                         <label for="">Số ngày nghỉ:</label>
                         <input type="number" class="form-control" id="day-number" name="" value="1" min="1">
+                    </div> -->
+
+                    <div class="form-group">
+                        <label class="control-label" for="">Số ngày nghỉ:</label>
+                        <select name="cars" class="custom-select" id="day-select">
+                        </select>
                     </div>
+
                     <div class="form-group">
                         <label for="">Lý do:</label>
                         <textarea class="form-control" id="reason" name="" rows="4" placeholder=""></textarea>
                     </div>
+
                     <div class="form-group">
                         <label for="">File đính kèm:</label>
                         <div class="custom-file">
@@ -74,7 +83,6 @@
                     <div class="d-flex flex-end mt-4">
                         <button class="btn btn-success ml-auto submit-btn" id="submit-btn">Gửi / Submit</button>
                     </div>
-
                 </div>
             </div>
 

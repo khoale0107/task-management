@@ -915,24 +915,30 @@ if (window.location.pathname.includes("nopdon.php")) {
             $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
         });
 
+        for (i = 1; i <= $("#remain-days").text(); i++) {
+            let dayOption = `<option value="${i}">${i}</option>`
+            $("#day-select").append(dayOption);
+        }
+
         //nop don/submit
         $(".submit-btn").click(function (e) { 
             e.preventDefault();
 
             //check input
             let dayNumber = $("input[id='day-number']").val();
+            let dayNumberSelect = $("#day-select").val();
 
-            if (!$.isNumeric(dayNumber) || dayNumber < 1 || !Number.isInteger(Number(dayNumber))) {
-                showModal("Lỗi", "Số ngày nghỉ không hợp lệ.")
-                return;
-            }
+            // if (!$.isNumeric(dayNumber) || dayNumber < 1 || !Number.isInteger(Number(dayNumber))) {
+            //     showModal("Lỗi", "Số ngày nghỉ không hợp lệ.")
+            //     return;
+            // }
 
             if ($("#remain-days").html() == 0) {
-                showModal("Đã hết số ngày được nghỉ", "Bạn không được phép nghỉ thêm ngày nào trong năm nay.")
+                showModal("Thông báo", "Bạn không được phép nghỉ thêm ngày nào trong năm nay.")
                 return;
             }
 
-            if (parseInt(dayNumber) > parseInt($("#remain-days").html())) {
+            if (parseInt(dayNumberSelect) > parseInt($("#remain-days").text())) {
                 showModal("Lỗi", "Số ngày nghỉ vượt mức cho phép.")
                 return;
             }
@@ -946,7 +952,7 @@ if (window.location.pathname.includes("nopdon.php")) {
             let userName = $("#username").text(); //#username tren navbar
             
             let fd = new FormData();
-            fd.append('songay', dayNumber);
+            fd.append('songay', dayNumberSelect);
             fd.append('lydo', reason);
             fd.append('username', userName);
 
@@ -961,11 +967,10 @@ if (window.location.pathname.includes("nopdon.php")) {
             xhr.onload = function() {
                 let data = JSON.parse(this.responseText)
                 if (data.status) {
-                    alert(data.data)
                     window.location.reload();
                 }
                 else {
-                    showModal("Lỗi", data.data)
+                    showModal("Thông báo", data.data)
                 }
             }	
 
@@ -985,7 +990,6 @@ if (window.location.pathname.includes("duyetdon.php")) {
     $(document).ready(function () {
         //chuc nang linh tinh
         $(".navbar-collapse a[href='duyetdon.php']").addClass("active");
-
         loadRequest()
     });
 
@@ -1095,11 +1099,10 @@ if (window.location.pathname.includes("duyetdon.php")) {
 
 
         if (requestList[index].trangthai != 'waiting') {
-            $(".btn-group").css("display", "none");
+            $(".button-group").css("display", "none");
         }
         else {
-            $(".btn-group").css("display", "inline-flex");
-
+            $(".button-group").css("display", "inline-flex");
         }
         
         currentRequestID = requestList[index].ID
