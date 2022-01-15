@@ -11,34 +11,6 @@
         header('Location:congviec.php');
         die();
     }
-
-    $stmt = $conn->prepare('SELECT task.*, hoten, maphongban from task, account where task.id = ? and task.username = account.username');
-    $stmt->bind_param("s", $_GET['id']);
-
-    if (!$stmt->execute()) {
-        die($error = $stmt->error);
-    }
-    
-    $result = $stmt->get_result();
-    $row = $result->fetch_assoc();
-
-    if ($result->num_rows == 0) {
-        header("Location:congviec.php");
-        die();
-    }
-
-    $stmt = $conn->prepare('SELECT response.*, duedate, hoten, avatar, chucvu from response, account, task 
-    where response.taskid = ? 
-    and response.username = account.username and response.taskid = task.id
-    ORDER BY responsedate DESC;');
-    $stmt->bind_param("s", $_GET['id']);
-
-    if (!$stmt->execute()) {
-    die($error = $stmt->error);
-    }
-
-    $response_list = $stmt->get_result();
-    $is_submit_ontime = 'Đúng hạn';
 ?>
 
 
@@ -63,6 +35,37 @@
 <div id="wrapper">
     <?php           
         include 'navbar.php';
+    ?>
+
+    <?php 
+        $stmt = $conn->prepare('SELECT task.*, hoten, maphongban from task, account where task.id = ? and task.username = account.username');
+        $stmt->bind_param("s", $_GET['id']);
+    
+        if (!$stmt->execute()) {
+            die($error = $stmt->error);
+        }
+        
+        $result = $stmt->get_result();
+        $row = $result->fetch_assoc();
+    
+        if ($result->num_rows == 0) {
+            header("Location:congviec.php");
+            die();
+        }
+    
+        $stmt = $conn->prepare('SELECT response.*, duedate, hoten, avatar, chucvu from response, account, task 
+        where response.taskid = ? 
+        and response.username = account.username and response.taskid = task.id
+        ORDER BY responsedate DESC;');
+        $stmt->bind_param("s", $_GET['id']);
+    
+        if (!$stmt->execute()) {
+        die($error = $stmt->error);
+        }
+    
+        $response_list = $stmt->get_result();
+        $is_submit_ontime = 'Đúng hạn';
+    
     ?>
 
     <?php
@@ -209,7 +212,7 @@
                             if ($_SESSION['permission'] == 'Trưởng phòng' and $row['trangthai'] == 'Waiting') { ?>
                                 <div class="float-right mt-4">
                                     <button id='btn-reject' class='btn btn-danger px-4 py-1 '>Reject</button>
-                                    <button id='btn-approve' class='btn btn-success px-4 py-1 ml-1'>Approve</button>
+                                    <button id='btn-approve' class='btn btn-success px-4 py-1 '>Approve</button>
                                 </div>
                             <?php }
                         ?>

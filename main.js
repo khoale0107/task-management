@@ -1,7 +1,6 @@
 let departmentid = $("#department-id").text();
 let employeeid = $("#username").text();
 let chucvu = $("#permission").text();
-console.log(chucvu);
 
 //login page=================================================================================
 if (window.location.pathname.includes("login.php")) {
@@ -35,11 +34,12 @@ if (window.location.pathname.includes("login.php")) {
                 } 
             }, 'json')
             .fail(function(xhr, status, error) {
-                alert("Cannot connect to handle-login.php:" + xhr.responseText);
+                // alert("Cannot connect to handle-login.php:" + xhr.responseText);
             });   
         });
     });
 }
+
 
 //doi mat khau page=================================================================================
 if (window.location.pathname.includes('reset-password')) {
@@ -51,12 +51,12 @@ if (window.location.pathname.includes('reset-password')) {
         let confirmPassword = $("input[name='confirm-password']").val();
 
         if (currentPassword == '' || newPassword == '' || confirmPassword == '') {
-            $("#error-message").text("Hãy nhập đủ thông tin"); 
+            showModal("Lỗi", "Hãy nhập đủ thông tin.")
             return;
         }
 
         if (newPassword.length < 6) {
-            $("#error-message").text("Mật khẩu phải chứa ít nhất 6 ký tự"); 
+            showModal("Lỗi", "Mật khẩu phải chứa ít nhất 6 ký tự.")
             return;
         }
 
@@ -68,16 +68,19 @@ if (window.location.pathname.includes('reset-password')) {
             },
             function(data) {
                 if (data.status) {
-                    $("#error-message").removeClass('text-danger')
-                    $("#error-message").addClass('text-success').text(data.data);
+                    showModal("Hoàn tất", "Đổi mật khẩu thành công!")
 
                     if (window.location.pathname.includes('reset-password-required.php')) {
                         window.location.replace("/index.php");
                     }
+
+                    $("input[name='current-password']").val('')
+                    $("input[name='new-password']").val('');
+                    $("input[name='confirm-password']").val('');
                 }
                 else {
-                    $("#error-message").removeClass('text-success')
-                    $("#error-message").addClass('text-danger').text(data.data);
+                    showModal("Lỗi", data.data)
+
                 }
             }, 'json')
         .fail(function(xhr, status, error) {
@@ -559,6 +562,10 @@ if (window.location.pathname.includes("congviec.php")) {
         //chuc nang linh tinh
         $(".navbar-collapse a[href='congviec.php']").addClass("active");
         $(".btn-addtask").click(function (e) { 
+            $("input[id='task-name']").val('')
+            $("textarea[id='task-description']").val('')
+            $("#emp-select").val('')
+            $("#duedate").val('')
             $("#modal-addtask").modal('show');
             $(".error-msg").remove();
         });
@@ -641,7 +648,7 @@ if (window.location.pathname.includes("congviec.php")) {
                                     <i class="fas fa-clipboard-list mr-3" style="font-size:2rem"></i>
                                     <div class="d-flex flex-column flex-grow-1" style="width:0px">
                                         <div class="ellipsis task-name"><b>${task.tieude}</b></div>
-                                        <div class="ellipsis">${task.hoten}</div>
+                                        <div class="ellipsis">Thực hiện: ${task.hoten}</div>
                                     </div>
 
                                     <div class="d-flex flex-column" style="min-width: 72px;text-align: end;">
@@ -730,6 +737,7 @@ if (window.location.pathname.includes("congviec.php")) {
     }
     
 }
+
 
 //chi tiet task page
 if (window.location.pathname.includes("task.php")) {
@@ -858,6 +866,12 @@ if (window.location.pathname.includes("task.php")) {
 
         //set new duedate if specified
         if ($("#new-duedate").val()) {
+            let curDateObj = new Date();
+            let dueDateObj = new Date($("#new-duedate").val());
+            if (curDateObj > dueDateObj) {
+                showModal("Lỗi", "Deadline phải lớn hớn thời gian hiện tại.")
+                return;
+            }
             fd.append('newduedate', $("#new-duedate").val());
         }
 
@@ -904,6 +918,7 @@ if (window.location.pathname.includes("task.php")) {
         xhr.send(fd);
     }
 }
+
 
 //nop don nghi phep page=================================================================================================
 if (window.location.pathname.includes("nopdon.php")) {
@@ -1060,7 +1075,7 @@ if (window.location.pathname.includes("duyetdon.php")) {
 
             }
             else {
-                alert(data.data)
+                // alert(data.data)
             }
         }	
         xhr.send(fd);
@@ -1218,6 +1233,7 @@ if (window.location.pathname.includes("profile.php")) {
         });
     });
 }
+
 
 //all pages===============================================================================================
 $(document).ready(function(){

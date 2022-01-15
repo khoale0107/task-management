@@ -1,0 +1,154 @@
+bootstrap:
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+web lấy ảnh tạm (size x size): http://placehold.it/700x700
+
+transition
+transform
+animate
+
+----------------------------------------------------------------------------
+-chỉ chỉnh opacity cho text nhưng ko dính border, background
+color: hsla(0,0%,100%,0.5); //trắng
+color: hsla(0,0%,0%,0.5); //đen
+
+
+----------------------------------------------------------------------------
+-chặn auto fill background input
+input {
+     transition: background-color 50000s ease-in-out 0s;
+}
+
+
+----------------------------------------------------------------------------
+-tab trượt ngang:
+$("button").click(function(){
+    $("#panel").toggleClass("slide")
+});
+#panel {
+  transform: translateX(-100%);
+  opacity: 0;
+  transition: all ease .2s
+}
+.slide {
+    transform: translateX(0%) !important;
+    opacity: 1 !important;
+}
+
+
+----------------------------------------------------------------------------
+-đổi màu smoothly:
+div:hovrer {background-color: #460379;
+    	    transition: all 0.2s ease-in-out;}
+
+
+----------------------------------------------------------------------------
+-zoome nhẹ/move nhẹ, ảnh, button khi hover:
+img {transition: .3s all}
+img:hover {trasform: scale(1.2)}
+img:hover {transorm: translateY(2px)}
+thẻ cha thêm overflow: hidden;
+
+
+----------------------------------------------------------------------------
+-chỉnh background full:
+background: url(1.png) 50% fixed;
+background-size: cover;
+
+hoac
+    background-image: url("/img/2.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover; 
+    backdrop-filter: brightness(60%);// cai nay hoi lag, ko nen dung
+
+
+----------------------------------------------------------------------------
+-cool dropdown subnav dùng scale và opacity (scale 0 như display:none (chỉ với absolute))
+<div class="hoverme">
+        hoverme
+        <div class="subnav">tao<br>ne<br>may</div>
+</div>
+
+.hoverme {
+        position: relative;
+        width: fit-content;
+        background-color: pink;
+}
+.hoverme:hover .subnav {
+        transform: scale(1);
+        opacity: 1;
+        visibility: visible;
+}
+.subnav {
+        position: absolute;
+        background: rgb(197, 197, 197);
+        width: 100px;
+        transition: .2s all ease;
+        transform: scale(0);
+        visibility: hidden;  
+	//thắc mắc solved: dùng visibility ngon hơn display:none vì 
+	//khi ngừng hover vần còn transition (chỉ absolute)
+        transform-origin: 10% top;
+        opacity: 0;
+}
+
+
+----------------------------------------------------------------------------
+vạch ngăn cách nhỏ (home | about) :
+.example::before {
+    	position: absolute;
+	content: "";
+        left: -10px;
+        border-left: 2px solid black;
+        height: 20px;
+        top: 50%;
+        transform: translateY(-50%)
+}
+
+----------------------------------------------------------------------------
+hover cho ảnh đã có backgound-img (thường thì đổi color nhưng có background nên ko đc):
+div.hover {
+	filter: brightness(80%);
+}
+
+----------------------------------------------------------------------------
+hình tam giác nhỏ trên các dropdown,
+dropdown:before {
+	content: "";
+	border-left: 10px solid transparent;
+	border-right: 10px solid transparent;
+	border-botoom: 10px solid #fff;
+}
+
+----------------------------------------------------------------------------
+cắt img hình chữ nhật thành hình vuông
+img {
+  object-fit: cover;
+  width:230px;
+  height:230px;
+}
+
+-------------------------------------------------------------------------------------
+Thêm "..." vào header quá dài.
+<p>đây là header quá dài</P>
+
+//đối với giới hạn  1 dòng
+p {
+   text-overflow: ellipsis;
+   white-space: nowrap;  
+   overflow: hidden;
+   width:100px; 
+}
+//đối với giới hạn n dòng
+p {
+   overflow: hidden;
+   width:100px;
+   display: -webkit-box;
+   -webkit-line-clamp: 3;
+   -webkit-box-orient: vertical;
+}
+nguồn: https://stackoverflow.com/questions/36652580/how-to-add-three-dots-to-text-when-overflow-in-html

@@ -22,15 +22,16 @@
     <link rel="stylesheet" href="style.css">
 </head>
 
-<?php
-    require_once 'permission-admin.php';
-?>
+
 
 
 <body>
 <div id="wrapper">
     <?php           
         include 'navbar.php';
+    ?>
+    <?php
+        require_once 'permission-admin.php';
     ?>
 
     <div class="container ">
@@ -57,7 +58,7 @@
 
                     <!-- table==== -->
                     <div class="border  overflow-auto" style="max-height:480px">
-                        <table class="table mb-0  table-striped">
+                        <table class="table mb-0  table-striped table-hover">
                             <thead class="sticky-top bg-light" style="z-index: 1;">
                                 <tr class="">
                                     <th>Mã nhân viên</th>

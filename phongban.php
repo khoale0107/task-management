@@ -22,14 +22,15 @@
     <link rel="stylesheet" href="style.css">
 </head>
 
-<?php
-    require_once 'permission-admin.php';
-?>
+
 
 <body>
 <div id="wrapper">
     <?php           
         include_once 'navbar.php';
+    ?>
+    <?php
+        require_once 'permission-admin.php';
     ?>
 
     <div class="container">

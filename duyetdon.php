@@ -46,7 +46,7 @@
                     <div class="border p-3 rounded bg-white">
                         <h5>Danh sách yêu cầu nghỉ phép</h5>
                         <hr class="mt-2 ">
-                        <div class="text-muted mb-2"><b>Phòng ban: <?= !!($_SESSION['department-name']) ? $_SESSION['department-name'] : "Tất cả" ?></b></div>
+                        <div class="text-muted mb-2"><b>Phòng ban: <?= !!($_SESSION['department-name']) ? $_SESSION['department-name'] : "tất cả (chỉ trưởng phòng)" ?></b></div>
 
                         <div class=" mb-2 request-container">
                         </div>
@@ -102,7 +102,7 @@
                 </div>
 
                 <div class="button-group float-right">
-                    <button type="button" class="btn btn-danger" onclick="refuse()">Refuse</button>
+                    <button type="button" class="btn btn-danger mr-1" onclick="refuse()">Refuse</button>
                     <button type="button" class="btn btn-success" onclick="approve()" >Approve</button>
                 </div>
             </div>
