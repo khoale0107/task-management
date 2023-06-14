@@ -8,6 +8,6 @@ CEO account:
  -password: 123456
  
 
-Login to CEO account to see a list of staff along with their username.   
+Log in to CEO account to see a list of staff along with their username on employee page.   
 
-Everyone else has a default password similar to their username, if you can't login to an account, head to the CEO account and reset that account's password via the employee page.
+Everyone else has a default password similar to their username. If you can't log in to an account, head to the employee page using CEO account and reset the password of that one.
